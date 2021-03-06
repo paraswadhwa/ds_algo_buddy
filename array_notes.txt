@@ -1,0 +1,183 @@
+
+*********************************** Array problems Tricks ******************************
+
+While dry run - run these 4 test cases ->
+
+1. all random values
+2. all equal values
+3. values in inc. order
+4. values in dec. order
+
+----------------------------------------------------------------------------------------
+
+General concepts ->
+
+1. Subarray - must be contiguous
+	{1,2,3} -> {1},{2},{3},{1,2},{2,3},{1,2,3}
+
+2. Circular Subarray - normal subarray + subarray formed by connecting last element back to the 					   first element
+	{10,5,-5} -> {10},{5},{-5},{10,5},{5,-5},{10,5,-5} and {-5,10},{-5,10,5},{5,-5,10}
+
+----------------------------------------------------------------------------------------
+
+Generic tricks ->
+
+1. reversal algorithm
+	- Rotate by D places
+
+2. think about new element which is to be added and its relation with prev values
+	- Move zeroes to end
+
+3. Kadane's Algo
+	- maximum sum subarray
+	- maximum length alternating even-odd subarray
+	- maximum sum circular subarray
+
+4. Moore's Voting Algo
+	- majority element
+
+5. Sliding window technique
+	- Maximum Sum of K Consecutive elements
+	- Find subarray with given sum (unsorted array of non negative integers)
+	- N-bonacci numbers
+	- Chocolate Distribution Problem (find diff between max and min elements of window)
+
+6. Sliding window + Hashing
+	- count distinct elements in every window of size k
+
+7. Prefix Sum technique
+	- Find if an array has an equilibrium point or not
+	- Maximum Occuring Element in their ranges
+	- Check if given array can be divided into 3 parts of equal sum
+
+8. Prefix Sum + Hashing
+	- Check if there is a subarray with given sum (array of +ve and -ve integers)
+	- Maximum Length subarray with equal numbers of 0's and 1's
+
+----------------------------------------------------------------------------------------
+
+Problems ->
+
+1. 	Leaders in an array -> start from the end
+2. 	Rotate by D places  -> use reversal algorithm
+3. 	Max difference between i and j such that j>i -> calculate diff between current element i.e. 
+   	j and shortest of all elements before that i.e. i
+4. 	Move zeroes to end -> maintain count of non-zero elements and determine the correct position 
+   	to insert them using that count
+5. 	Stock buy and sell
+6. 	Maximum consecutive 1's -> take 2 vars i.e. totalCount and currentCount
+7. 	Maximum sum subarray -> handle all negative's case as well
+8. 	Maximum length alternating even-odd subarray -> length will at least be 1
+
+9. 	Maximum sum circular subarray -> handle all negative's case as well
+		= max(max sum of normal subarray,max sum of circular subarray)
+        = max(max sum of normal subarray,(arr sum - min sum subarray))
+        = max(max sum of normal subarray,(arr sum + max sum of inverted subarray))
+
+10. Majority Element -> an element that appears more than n/2 times in an array of size n
+
+11. Minimum Consecutive Flips -> 
+	- Always flip Second group element for minimum flips
+	- Handle last element flip also (if needed)
+
+12. Maximum Sum of K Consecutive elements ->  use sum of previous window
+	- find sum of initial window of k elements
+	- for sum of next window -> add next element to the initial window sum and substract first 
+	                            element of the window
+
+13. Subarray with given sum (unsorted array of non negative integers)-> 
+	- loop till last element
+	- clear previous window before starting new window (find the correct starting point of 
+	  new window)
+	- add current element in the last step
+
+14. N-bonacci numbers -> 
+	- for n, there will be n-1 zeroes and 1 one's
+	- place all zeros and one's
+	- for other elements use the formulae :
+		arr[i] = arr[i-1] + arr[i-1] - arr[i-n-1]
+
+15. Equilibrium point -> a point where left sum and right sum are equal
+	- compute left sum while iterating the array
+	- right_sum = array_sum - arr[i] - left_sum
+
+16. Maximum Occuring Element in their ranges
+	- increment index of L[i] position
+	- increment index of R[i]+1 position
+	- calculate prefix sum
+	- find max value in the array
+
+17. Missing no. in an array 
+	- calculate sum of array elements using for loop
+	- calculate sum N elements using formula , sum = n * (n+1)/2
+	- substract both the sum values to obtain the missing number
+
+18. Chocolate Distribution Problem -Distribute chocolate packets to m students in such a way 
+									that they all get at least 1 packet and difference between max no of chocolates given and min no of chocolates given should be minimum
+	- sort the array
+	- Create a window of m elements and find diff between max and min
+	- return min diff after sliding all windows
+
+----------------------------------------------------------------------------------------
+
+Algorithm's ->
+
+1. Kadane's Algorithm
+
+   Initialize:
+    max_so_far = 0
+    max_ending_here = 0
+
+	Loop for each element of the array
+	  (a) max_ending_here = max_ending_here + a[i]
+	  (b) if(max_ending_here > max_so_far)
+	            max_so_far = max_ending_here
+	  (c) if(max_ending_here < 0)
+	            max_ending_here = 0
+	return max_so_far
+
+--------------------------------------------
+
+2. Moore's Voting Algo (cut other element's votes) -> 
+
+	-> Find a candidate  + Check whether candidate is majority or not
+
+	a. consider 1st element as majority (store its index in result) and initilize count as 1
+	b. loop for each element from 2nd element
+		- if current element is same as current majority
+			increment count
+		- else
+			decrement count
+
+		- if count == 0
+			reset the count to 1
+			make current element as majority
+
+
+	function findMajority(arr){
+		let result = 0;
+		let count  = 1;
+
+		for(let i=0;i<arr.length;i++){
+			if(arr[i] == arr[result]){
+				count++;
+			}
+			else{
+				count --;
+			}
+			if(count == 0){
+				result = i;
+				count  = 1;
+			}
+		}
+		return result;
+	}
+
+--------------------------------------------
+
+3. Sliding window technique
+
+	- find initial window of k elements
+	- find next window by adding next element and removing first element
+
+----------------------------------------------------------------------------------------
